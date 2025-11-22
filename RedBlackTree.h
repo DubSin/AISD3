@@ -40,6 +40,33 @@ public:
         delete nil;
     }
 
+    // Новый метод для чтения скобочной записи из файла
+    bool parseAndBuildFromFile(const string& filename) {
+        try {
+            ifstream file(filename);
+            if (!file.is_open()) {
+                cout << "Error: Cannot open file '" << filename << "'" << endl;
+                return false;
+            }
+            
+            string bracketNotation;
+            getline(file, bracketNotation);
+            file.close();
+            
+            if (bracketNotation.empty()) {
+                cout << "Error: File is empty or contains no data" << endl;
+                return false;
+            }
+            
+            parseAndBuild(bracketNotation);
+            return true;
+        }
+        catch (const exception& e) {
+            cout << "Error reading file: " << e.what() << endl;
+            return false;
+        }
+    }
+
     void parseAndBuild(const string& bracketNotation) {
         try{
             clear(); 
@@ -52,7 +79,7 @@ public:
             Stack<int> childCountStack; // Для отслеживания количества детей у каждого узла
             string currentNumber;
             bool readingNumber = false;
-            Node* lastNode = nullptr;
+            Node* lastNode = nullptr; // Последний созданный узел
             
             for (size_t i = 0; i < bracketNotation.length(); i++) {
                 char c = bracketNotation[i];
@@ -331,6 +358,7 @@ public:
         // Вычисляем максимальную ширину (количество элементов на последнем уровне)
         int maxWidth = (1 << maxLevel) * 4 - 3;
         
+        // Создаем массив строк для вывода
         int linesCount = height * 2 - 1;
         char** lines = new char*[linesCount];
         for (int i = 0; i < linesCount; i++) {
@@ -366,6 +394,7 @@ public:
             // Вычисляем смещение для детей
             int offset = (1 << (maxLevel - level - 1));
             
+            // Добавляем левого ребенка
             if (node->left != nil) {
                 int leftPos = pos - offset;
                 lines[level * 2 + 1][leftPos + 1] = '/';
@@ -375,6 +404,7 @@ public:
                 queue.push({node->left, {level + 1, leftPos}});
             }
             
+            // Добавляем правого ребенка
             if (node->right != nil) {
                 int rightPos = pos + offset;
                 lines[level * 2 + 1][pos] = '-';
@@ -716,6 +746,5 @@ private:
         }
     }
 };
-
 
 #endif

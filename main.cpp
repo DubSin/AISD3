@@ -51,11 +51,29 @@ int main(){
                     cin >> rbt_option;
                     switch(rbt_option){
                         case 1:{
-                            string expression;
-                            cout << "Input expression in bracket notation " << endl;
-                            cin.ignore();
-                            getline(cin, expression);
-                            rbt.parseAndBuild(expression);
+                            int dir;
+                            cout << "1)Input" << endl;
+                            cout << "2)From file" << endl;
+                            cout << "Choose: ";
+                            cin >> dir;
+                            switch(dir){
+                                case 1:{
+                                    string expression;
+                                    cout << "Input expression in bracket notation " << endl;
+                                    cin.ignore();
+                                    getline(cin, expression);
+                                    rbt.parseAndBuild(expression);
+                                    break;
+                                }
+                                case 2:{
+                                    string fileName;
+                                    cout << "Input file name" << endl;
+                                    cin.ignore();
+                                    getline(cin, fileName); 
+                                    rbt.parseAndBuildFromFile(fileName);
+                                    break;
+                                }
+                            }
                             break;
                         }
                         case 2:{
