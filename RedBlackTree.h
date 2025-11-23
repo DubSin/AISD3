@@ -258,7 +258,7 @@ public:
             // Обрабатываем узел
             current = stack.top();
             stack.pop();
-            cout << current->data << " ";
+            cout << current->data << getColorSymbol(current->color) << " ";
             
             current = current->right;
         }
@@ -277,7 +277,7 @@ public:
         while (!stack.empty()) {
             Node* current = stack.top();
             stack.pop();
-            cout << current->data << " ";
+            cout << current->data << getColorSymbol(current->color) << " ";
             
             if (current->right != nil) {
                 stack.push(current->right);
@@ -312,12 +312,11 @@ public:
         }
         
         while (!stack2.empty()) {
-            cout << stack2.top()->data << " ";
+            cout << stack2.top()->data << getColorSymbol(stack2.top()->color) << " ";
             stack2.pop();
         }
         cout << endl;
     }
-
 
     void levelOrderIterative() {
         if (root == nil) {
@@ -331,7 +330,7 @@ public:
         while (!queue.empty()) {
             Node* current = queue.front();
             queue.pop();
-            cout << current->data << " ";
+            cout << current->data << getColorSymbol(current->color) << " ";
             
             if (current->left != nil) {
                 queue.push(current->left);
@@ -346,6 +345,7 @@ public:
     Node* getRoot() {
         return root;
     }
+
     void printTree() {
         if (root == nil) {
             cout << "Tree empty" << endl;
@@ -373,7 +373,7 @@ public:
         queue.push({root, {0, maxWidth / 2}});
         
         cout << "Red Black Tree" << endl;
-        cout << "Red with square brackets" << endl;
+        cout << "Red with square brackets, Black without brackets" << endl;
         while (!queue.empty()) {
             auto front = queue.front();
             Node* node = front.first;
@@ -381,9 +381,11 @@ public:
             int pos = front.second.second;
             queue.pop();
             
-            string nodeStr = to_string(node->data);
+            string nodeStr = to_string(node->data) + getColorSymbol(node->color);
             if (node->color == Color::RED) {
-                nodeStr = "[" + nodeStr + "]"; 
+                nodeStr = "[" + to_string(node->data) + "]" + getColorSymbol(node->color);
+            } else {
+                nodeStr = to_string(node->data) + getColorSymbol(node->color);
             }
             
             int startPos = pos - nodeStr.length() / 2;
@@ -436,6 +438,10 @@ public:
     }
 
 private:
+    // Вспомогательная функция для получения символа цвета
+    string getColorSymbol(Color color) {
+        return (color == Color::RED) ? "(R)" : "(B)";
+    }
 
     int getHeight(Node* node) {
         if (node == nil) return 0;
